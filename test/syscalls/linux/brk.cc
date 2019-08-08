@@ -23,6 +23,7 @@ namespace testing {
 
 TEST(BrkTest, BrkSyscallReturnsOldBrkOnFailure) {
   auto old_brk = sbrk(0);
+  sleep(1000);
   EXPECT_THAT(syscall(SYS_brk, reinterpret_cast<void*>(-1)),
               SyscallSucceedsWithValue(reinterpret_cast<uintptr_t>(old_brk)));
 }

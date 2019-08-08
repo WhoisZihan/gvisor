@@ -22,6 +22,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -115,6 +116,12 @@ func main() {
 
 	// All subcommands must be registered before flag parsing.
 	flag.Parse()
+
+	if *testOnlyAllowRunAsCurrentUserWithoutChroot {
+		// SIGTERM is sent to all processes if a test exceeds its
+		// timeout and this case is handled by syscall_test_runner.
+		signal.Ignore(syscall.SIGTERM)
+	}
 
 	// Are we showing the version?
 	if *showVersion {
